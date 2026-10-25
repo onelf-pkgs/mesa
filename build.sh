@@ -40,7 +40,7 @@ xbps-install -Syu xbps > /dev/null
 xbps-install -Syu > /dev/null
 xbps-install -y \
     base-devel cmake meson ninja pkg-config python3 python3-Mako \
-    python3-packaging python3-ply python3-yaml bison flex glslang \
+    python3-packaging python3-ply python3-pycparser python3-yaml bison flex glslang \
     llvm21-devel clang21-devel libclc SPIRV-LLVM-Translator-devel SPIRV-Tools-devel \
     expat-devel zlib-devel libzstd-devel elfutils-devel libdrm-devel \
     libglvnd-devel wayland-devel wayland-protocols libX11-devel \
