@@ -18,7 +18,7 @@ permissions: {}
 
 jobs:
   release:
-    uses: onelf-pkgs/.github/.github/workflows/pkg-release.yml@6c3e601d0b72e9d3705f3caee46e59376fb484ba
+    uses: onelf-pkgs/.github/.github/workflows/pkg-release.yml@15f3b1b9c9847ee4222208f6d487fcd5f527d167
     permissions:
       contents: write
       id-token: write
