@@ -42,7 +42,9 @@ the same Mesa. Each release carries, per architecture:
 | `gl-<arch>.tar.zst` | the GL tree: `lib/` with the drivers and their libraries apart from glibc, `share/glvnd` |
 | `gl-vulkan-<arch>.tar.zst` | the same with the Vulkan drivers, loader and `share/vulkan` |
 | `gl-<arch>.onelf`, `gl-vulkan-<arch>.onelf` | each tree packed by `onelf sysroot pack-gl` |
-| `*.onelf.blake3` | the hash a package pins |
+
+The release notes list each `.onelf` with its BLAKE3, the hash a package
+pins to fetch it at launch.
 
 ## Building
 
