@@ -86,7 +86,9 @@ cp stubs/gen_perf.py "$work/mesa/src/intel/perf/gen_perf.py"
 
 # The drivers' OpenCL kernels are compiled by mesa_clc and vtn_bindgen2,
 # which need clang. They are built first against the distribution's LLVM
-# and only run during the build; the drivers carry no LLVM.
+# and only run during the build; the drivers carry no LLVM. The
+# per-driver precompilers (panfrost_compile, asahi_clc) need no LLVM and
+# are built with the drivers.
 meson setup "$work/host" "$work/mesa" \
     --prefix="$work/tools" \
     -D gallium-drivers= -D vulkan-drivers= -D platforms= \
@@ -110,7 +112,7 @@ meson setup "$work/build" "$work/mesa" \
     -D glx=dri -D egl=enabled -D gbm=enabled -D glvnd=enabled \
     -D gles1=disabled -D gles2=enabled \
     -D llvm=disabled \
-    -D mesa-clc=system -D precomp-compiler=system \
+    -D mesa-clc=system -D precomp-compiler=enabled \
     -D gallium-va=disabled -D gallium-rusticl=false -D video-codecs= \
     -D intel-rt=disabled -D microsoft-clc=disabled -D teflon=false \
     -D valgrind=disabled -D libunwind=disabled -D lmsensors=disabled \
