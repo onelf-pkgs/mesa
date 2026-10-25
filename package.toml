@@ -1,0 +1,16 @@
+# Mesa for onelf packages: the GL and Vulkan drivers a host without its
+# own reaches at launch, and the build a bundle carries.
+#
+# The control repository, onelf-pkgs/.github, bumps the sources here when
+# upstream releases and resets `release` to 1. Raise `release` by hand
+# when the recipe changes and the sources do not. Releases are tagged
+# v<mesa version>-<release>.
+name = "mesa"
+release = 1
+arches = ["x86_64", "aarch64"]
+
+[sources.mesa]
+version = "26.2.5"
+url = "https://archive.mesa3d.org/mesa-{version}.tar.xz"
+sha256 = "794b3d1729075dae7ebd47c7283b7ca0cdb5dec668f7f11cc0a5d82f6138a0a5"
+upstream = { gitlab = "gitlab.freedesktop.org/mesa/mesa", tag = "^mesa-([0-9]+\\.[0-9]+\\.[0-9]+)$" }

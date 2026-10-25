@@ -1,0 +1,24 @@
+Let radeonsi and radv run on kernels older than 6.6.
+
+Mesa refuses amdgpu DRM versions before 3.54. Without the check the
+drivers run on older kernels, which pkgforge-dev has shipped since
+https://github.com/pkgforge-dev/archlinux-pkgs-debloated/pull/65.
+A bundle uses this Mesa only where the host has none of its own, so
+refusing there leaves the app on llvmpipe instead of the GPU.
+
+--- a/src/amd/common/ac_gpu_info.c
++++ b/src/amd/common/ac_gpu_info.c
+@@ -1468,13 +1468,6 @@
+    assert(info->drm_major == 3);
+    info->is_amdgpu = true;
+ 
+-   if (info->drm_minor < 54) {
+-      fprintf(stderr, "amdgpu: DRM version is %u.%u.%u, but this driver is "
+-                      "only compatible with 3.54.0 (kernel 6.6+) or later.\n",
+-              info->drm_major, info->drm_minor, info->drm_patchlevel);
+-      return AC_QUERY_GPU_INFO_FAIL;
+-   }
+-
+    if (ac_drm_device_get_sync_provider(dev)->wait == NULL) {
+       fprintf(stderr, "amdgpu: syncobj support is missing but is required.\n");
+       return AC_QUERY_GPU_INFO_FAIL;
