@@ -10,7 +10,7 @@ release = 1
 arches = ["x86_64", "aarch64"]
 
 [sources.mesa]
-version = "26.2.5"
+version = "26.2.6"
 url = "https://archive.mesa3d.org/mesa-{version}.tar.xz"
-sha256 = "794b3d1729075dae7ebd47c7283b7ca0cdb5dec668f7f11cc0a5d82f6138a0a5"
+sha256 = "b9436b3e1a8be76fbd4823dc884f90596ab7c6ac5e1867a305e66ffccfb31a92"
 upstream = { gitlab = "gitlab.freedesktop.org/mesa/mesa", tag = "^mesa-([0-9]+\\.[0-9]+\\.[0-9]+)$" }
