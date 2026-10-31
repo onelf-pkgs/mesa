@@ -49,7 +49,8 @@ pins to fetch it at launch.
 ## Building
 
 ```sh
-podman run --rm -v "$PWD:/src" -w /src ghcr.io/void-linux/void-glibc:latest sh build.sh
+podman run --rm -v "$PWD:/src" -v "$(command -v onelf):/usr/local/bin/onelf:ro" -w /src \
+  ghcr.io/void-linux/void-glibc:latest sh build.sh
 ```
 
 Versions and hashes are in `package.toml`; the

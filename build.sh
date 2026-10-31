@@ -12,23 +12,19 @@
 # Usage: build.sh
 #
 # Runs as root in a Void Linux (glibc) container with this directory as
-# the working directory. ONELF names an onelf binary to use instead of
-# the pinned release.
+# the working directory and onelf on PATH.
 set -eu
 cd "$(dirname "$0")"
 
 arch=$(uname -m)
-onelf_version=0.4.2
 case $arch in
 x86_64)
     gallium=crocus,iris,nouveau,r600,radeonsi,softpipe,svga,virgl
     vulkan=amd,intel,intel_hasvk,virtio
-    onelf_sha256=65121bb1abebed95191615218a4a5c6fdb97a410d8625d6ebc2fce3c09881dd6
     ;;
 aarch64)
     gallium=asahi,etnaviv,freedreno,lima,nouveau,panfrost,radeonsi,softpipe,v3d,vc4,virgl
     vulkan=amd,asahi,broadcom,freedreno,panfrost,virtio
-    onelf_sha256=ae0d80d206b2fbbefda122c0a17a543a18c40557a58847090a03722113a2410f
     ;;
 *)
     echo "unsupported architecture: $arch" >&2
@@ -179,24 +175,10 @@ tree() {
         -C "$dir" .
 }
 
-if [ -n "${ONELF:-}" ]; then
-    onelf=$ONELF
-else
-    onelf=build/tools/onelf-$onelf_version-$arch
-    if [ ! -x "$onelf" ]; then
-        mkdir -p build/tools
-        curl -fL --retry 3 -o "$onelf.part" \
-            "https://github.com/QaidVoid/onelf/releases/download/$onelf_version/onelf-$arch-linux"
-        echo "$onelf_sha256  $onelf.part" | sha256sum -c - > /dev/null
-        chmod +x "$onelf.part"
-        mv "$onelf.part" "$onelf"
-    fi
-fi
-
 # pack <name>: pack the tree into a GL build and record its hash.
 pack() {
     out=dist/$1-$arch.onelf
-    "$onelf" sysroot pack-gl "$work/$1-tree" -o "$out" | tee "$work/$1.log"
+    onelf sysroot pack-gl "$work/$1-tree" -o "$out" | tee "$work/$1.log"
     hash=$(grep -o '[0-9a-f]\{64\}' "$work/$1.log" | tail -n 1)
     if [ -z "$hash" ]; then
         echo "pack-gl printed no hash for $out" >&2
