@@ -18,7 +18,11 @@ permissions: {}
 
 jobs:
   release:
-    uses: onelf-pkgs/.github/.github/workflows/pkg-release.yml@15f3b1b9c9847ee4222208f6d487fcd5f527d167
+    uses: onelf-pkgs/.github/.github/workflows/pkg-release.yml@2dd1f5549e0c256531ccbe0c3dc42f5267523c8c
+    # Exists only in the `release` environment, which main alone may use;
+    # the publish job signs self-updates with it.
+    secrets:
+      ONELF_SIGNING_KEY: ${{ secrets.ONELF_SIGNING_KEY }}
     permissions:
       contents: write
       id-token: write
