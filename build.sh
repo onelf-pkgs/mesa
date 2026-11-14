@@ -42,7 +42,7 @@ xbps-install -y \
     libglvnd-devel wayland-devel wayland-protocols libX11-devel \
     libxcb-devel libXext-devel libXfixes-devel libXrandr-devel \
     libxshmfence-devel libXxf86vm-devel xcb-util-keysyms-devel \
-    Vulkan-Headers vulkan-loader-devel curl findutils patch tar xz zstd > /dev/null
+    Vulkan-Headers vulkan-loader-devel curl findutils gzip patch tar xz zstd > /dev/null
 
 toml() {
     python3 -c '
@@ -75,6 +75,17 @@ mesa_source=$(fetch mesa)
 rm -rf "$work/mesa" "$work/host" "$work/build" "$work/stage" "$work/tools"
 mkdir -p "$work/mesa"
 tar -xJf "$mesa_source" -C "$work/mesa" --strip-components=1
+
+# Venus goes where mesa's wrap expects it, so meson builds it from there
+# rather than cloning it.
+venus_dir=$(sed -n 's/^directory = //p' "$work/mesa/subprojects/venus-protocol.wrap")
+if [ "$venus_dir" != "venus-protocol-$(toml sources.venus-protocol.version)" ]; then
+    echo "mesa wants $venus_dir; follow it in [sources.venus-protocol]" >&2
+    exit 1
+fi
+venus_source=$(fetch venus-protocol)
+mkdir -p "$work/mesa/subprojects/$venus_dir"
+tar -xzf "$venus_source" -C "$work/mesa/subprojects/$venus_dir" --strip-components=1
 for p in patches/*.patch; do
     patch -d "$work/mesa" -p1 --forward --quiet < "$p"
 done

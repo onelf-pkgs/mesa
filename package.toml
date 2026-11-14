@@ -14,3 +14,11 @@ version = "26.3.0"
 url = "https://archive.mesa3d.org/mesa-{version}.tar.xz"
 sha256 = "91d729aa68bb89e4ec857841300bbe922bcb3e52b1f97566ca83930d3b28343a"
 upstream = { gitlab = "gitlab.freedesktop.org/mesa/mesa", tag = "^mesa-([0-9]+\\.[0-9]+\\.[0-9]+)$" }
+
+# Mesa builds its Venus Vulkan driver against this exact release, which
+# it no longer carries in its tree. Follow mesa's
+# subprojects/venus-protocol.wrap; the control repository leaves it be.
+[sources.venus-protocol]
+version = "1.1.3"
+url = "https://gitlab.freedesktop.org/virgl/venus-protocol/-/archive/v{version}/venus-protocol-v{version}.tar.gz"
+sha256 = "c5a362ca28e0a35042db1baeadaf9183500b216841e49d72714b80bae50b4445"
