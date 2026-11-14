@@ -15,8 +15,8 @@ distributions, containers and minimal virtual machines.
   the kernels some drivers carry.
 - **Built on Void Linux**, whose official images cover x86_64 and
   aarch64, against glibc 2.41.
-- **AMD GPUs on older kernels.** Mesa refuses kernels before 6.6 for
-  radeonsi and radv; `patches/radeonsi-old-kernels.patch` drops that
+- **AMD GPUs on older kernels.** Mesa refuses kernels before 6.11.2
+  for radeonsi and radv; `patches/radeonsi-old-kernels.patch` drops that
   check, as pkgforge-dev's builds do, so such a host draws on its GPU
   instead of falling back to softpipe.
 - **Compiled for size** (`-Os`), and stripped.
