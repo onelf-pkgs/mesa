@@ -1,24 +1,32 @@
-Let radeonsi and radv run on kernels older than 6.6.
+Let radeonsi and radv run on kernels older than 6.11.2.
 
-Mesa refuses amdgpu DRM versions before 3.54. Without the check the
+Mesa refuses amdgpu DRM versions before 3.59. Without the check the
 drivers run on older kernels, which pkgforge-dev has shipped since
 https://github.com/pkgforge-dev/archlinux-pkgs-debloated/pull/65.
 A bundle uses this Mesa only where the host has none of its own, so
 refusing there leaves the app on llvmpipe instead of the GPU.
 
+Mesa 26.3 raised the minimum from 3.54 because 3.59 clears new VRAM
+allocations, and dropped radv's per-application zero-VRAM workarounds
+with it. On an older kernel the few games those covered may show stale
+contents in fresh allocations. The other checks it removed guard RDNA 4
+display DCC, which those kernels cannot drive anyway, and radv's VM
+fault report after a GPU hang.
+
 --- a/src/amd/common/ac_gpu_info.c
 +++ b/src/amd/common/ac_gpu_info.c
-@@ -1468,13 +1468,6 @@
-    assert(info->drm_major == 3);
+@@ -1503,14 +1503,6 @@
+    assert(info->drm_major == AC_AMDGPU_DRM_MAJOR);
     info->is_amdgpu = true;
  
--   if (info->drm_minor < 54) {
+-   if (info->drm_minor < AC_AMDGPU_DRM_MINOR) {
 -      fprintf(stderr, "amdgpu: DRM version is %u.%u.%u, but this driver is "
--                      "only compatible with 3.54.0 (kernel 6.6+) or later.\n",
--              info->drm_major, info->drm_minor, info->drm_patchlevel);
--      return AC_QUERY_GPU_INFO_FAIL;
+-                      "only compatible with %u.%u.0 (kernel 6.11.2+) or later.\n",
+-              info->drm_major, info->drm_minor, info->drm_patchlevel,
+-              AC_AMDGPU_DRM_MAJOR, AC_AMDGPU_DRM_MINOR);
+-      return false;
 -   }
 -
     if (ac_drm_device_get_sync_provider(dev)->wait == NULL) {
        fprintf(stderr, "amdgpu: syncobj support is missing but is required.\n");
-       return AC_QUERY_GPU_INFO_FAIL;
+       return false;
